@@ -2,7 +2,7 @@
     Script to figure out whether or not a matrix is invertible
 ===================================================================#
 # Set current path
-cd("/home/gxyau/Documents/julia/research/")
+cd("/home/gxyau/Documents/github/SRU")
 
 # Use package for linear algebra, custom, etc
 include("./SRU.jl")

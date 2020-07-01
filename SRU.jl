@@ -7,7 +7,7 @@
 ===============================================================================#
 module SRU
 
-export vandermonde, Xmatrix
+export vandermonde, Xmatrix, permutations_cycles_form
 
 using Combinatorics, LinearAlgebra, Random
 
@@ -49,6 +49,32 @@ function Xmatrix(S::Array{Array{Int64,1},1}, π::Array{Int64,1})
         X[i,:] = [S[i] S̄[i]]
     end
     return X
+end
+
+function permutations_cycles_form(π::Array{Int64,1})
+    cycleform = Array{Array{Int64,1}, 1}()
+    n         = length(π)
+    visited   = Bool[false for i=1:n]
+    for i in 1:n
+        if !visited[i]
+            # Tortoise and hare cycle detection algorithm
+            cycle         = Int64[]
+            fast          = π[i]
+            slow          = i
+            push!(cycle, slow)
+            while slow != fast
+                slow          = π[slow]
+                fast          = π[π[fast]]
+                push!(cycle, slow)
+            end
+            push!(cycleform, cycle)
+            # Update seen value
+            for i in cycle
+                visited[i] = true
+            end
+        end
+    end
+    return cycleform
 end
 
 end # SRU module
