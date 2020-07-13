@@ -20,7 +20,7 @@ function column(elm::Real, dim::Integer)
         error("Dimension has to be positive integer!")
     end
 
-    return elm.^(1:dim)
+    return elm.^(0:dim-1)
 end
 
 #===============================================================================
@@ -46,7 +46,7 @@ function Xmatrix(S::Array{Array{Int64,1},1}, π::Array{Int64,1})
     S̄ = S[π]
     X = Array{Int64, 2}(undef, k, 2n)
     for i in 1:k
-        X[i,:] = [S[i] S̄[i]]
+        X[i,:] = [S[i] -S̄[i]]
     end
     return X
 end

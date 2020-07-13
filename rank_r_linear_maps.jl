@@ -1,25 +1,24 @@
-#===============================================================================
+#============================================================================
     On invertible matrices
-===============================================================================#
+============================================================================#
 # Set current path
 cd("/home/gxyau/Documents/github/SRU")
 
 # Use package for linear algebra, custom, etc
 using Revise
-using Combinatorics, LinearAlgebra, Random
+using Combinatorics, LinearAlgebra, Random, RowEchelon
 include("./SRU.jl")
 using .SRU
 
-#===============================================================================
+#============================================================================
     Computation for full ranked linear maps. Want to show that
     rank(X(S,π)) ≥ n+1 for all π ≠ id
-===============================================================================#
+============================================================================#
 # Defining basic parameters
-n   = 3 # Dimension of input vector space
-r   = 2
+n   = 4 # Dimension of input vector space
+r   = 3
 k   = 2n-r+1
 In  = Matrix(I,n,n) * 1 # Identity matrix
-V   = vandermonde((n+1):2n, n)
 # Generates x1, ..., xk
 for i in 1:n
     @eval $(Symbol(:x, i)) = In[:,$i]
@@ -47,6 +46,8 @@ for i in 2:length(perms) # Can start from 1 but that's identity
     r̂      = rank(X̂)
     cycles = permutations_cycles_form(perms[i])
     if (r̂ <= 2n-r)
+        println("The matrix is:")
+        display(X̂)
         println("Permutation $(perms[i]) has rank $r̂")
         println("There are $(length(cycles)) cycles in this permutation")
         println(cycles)
@@ -54,12 +55,12 @@ for i in 2:length(perms) # Can start from 1 but that's identity
     end
 end
 
-#===============================================================================
+#============================================================================
     Computation for full ranked linear maps. Want to show that
     rank(X(S,π)) ≥ n+1 for all π ≠ id
-===============================================================================#
-n  = 4 # Dimension of input vector space
-r  = 3 # Rank of the matrix
+============================================================================#
+n  = 3 # Dimension of input vector space
+r  = 2 # Rank of the matrix
 k  = 2n-r+1 # Number of vectors in S
 V1 = vandermonde(1:n, n)
 V2 = vandermonde(n+1:2n,n)
@@ -87,6 +88,8 @@ for i in 2:length(perms) # Can start from 1 but that's identity
     X̂ = Xmatrix(S,perms[i])
     r̂ = rank(X̂)
     if (r̂ <= 2n-r)
+        println("The matrix is:")
+        display(X̂)
         cycles = permutations_cycles_form(perms[i])
         println("Permutation $(perms[i]) has rank $r̂")
         println("There are $(length(cycles)) cycles in this permutation")
