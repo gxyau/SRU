@@ -59,11 +59,11 @@ end
     Computation for full ranked linear maps. Want to show that
     rank(X(S,π)) ≥ n+1 for all π ≠ id
 ============================================================================#
-n  = 3 # Dimension of input vector space
-r  = 2 # Rank of the matrix
+n  = 5 # Dimension of input vector space
+r  = 3 # Rank of the matrix
 k  = 2n-r+1 # Number of vectors in S
-V1 = vandermonde(1:n, n)
-V2 = vandermonde(n+1:2n,n)
+V1 = Matrix(I,n,n) * 1
+V2 = vandermonde(Int64[2,3,5,7,11],n)
 
 # Generating x1, ... xk
 for i in 1:n
@@ -83,11 +83,17 @@ end
 =#
 perms = permutations(1:k, k) |> collect
 
+# Number of permutations that violates the rank assumption
+count        = 0
+count_cycles = 0
+
 # Compute ranks for X(S,π) for π ∈ Sym(k)
 for i in 2:length(perms) # Can start from 1 but that's identity
+    global count, count_cycles
     X̂ = Xmatrix(S,perms[i])
     r̂ = rank(X̂)
-    if (r̂ <= 2n-r)
+    if (r̂ <= 2n-2)
+        count += 1
         println("The matrix is:")
         display(X̂)
         cycles = permutations_cycles_form(perms[i])
@@ -95,5 +101,11 @@ for i in 2:length(perms) # Can start from 1 but that's identity
         println("There are $(length(cycles)) cycles in this permutation")
         println(cycles)
         println("\n")
+        if (length(cycles) < n)
+            count_cycles += 1
+        end
     end
 end
+
+println("There are $count many permutations of not full rank")
+println("There are $count_cycles many permutations of < $n cycles")
